@@ -1,0 +1,28 @@
+package sit.int204.resurrections.repositories;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import sit.int204.resurrections.entities.Product;
+
+import java.util.List;
+
+public interface ProductRepository extends JpaRepository<Product, String> {
+    List<Product> findByPriceBetweenAndProductNameContains(Double lower, Double upper, String productName);
+
+    List<Product> findByPriceBetweenAndProductNameContains(Double lower, Double upper, String productName, Sort sort);
+
+
+    Page<Product> findByPriceBetweenAndProductNameContains(Double lower, Double upper, String productName, Pageable pageable);
+
+    List<Product> findByProductNameContains(String productName);
+
+    List<Product> findByProductLineStartingWith(String productLine);
+
+    @Query("SELECT p FROM Product p WHERE p.productLine LIKE :category")
+    List<Product> findProductByCategory(String category);
+
+    Product findFirstByOrderByPriceDesc();
+}
